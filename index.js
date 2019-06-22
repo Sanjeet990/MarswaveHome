@@ -30,6 +30,7 @@ const getEmail = async (headers) => {
 
 db.settings({timestampsInSnapshots: true});
 
+var port = process.env.PORT || 3000;
 
 app.onSync(async (body, headers) => {
   const userEmail = await getEmail(headers);
@@ -91,4 +92,4 @@ app.onSync(async (body, headers) => {
 });
 
 
-express().use(bodyParser.json(), app).listen(443);
+express().use(bodyParser.json(), app).listen(port);
