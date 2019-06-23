@@ -17,6 +17,12 @@ const auth0 = new AuthenticationClient({
   'domain': 'marswave.auth0.com'
 });
 
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
 const functions = require('firebase-functions');
 
 const {smarthome} = require('actions-on-google');
@@ -107,9 +113,10 @@ app.onExecute(async (body, headers) => {
   
   const { devices, execution } = body.inputs[0].payload.commands[0];
   
-  devices.forEach(device => {
-	  try {
-			const states = doExecute(userId, device.id, execution[0]);
+  const start = async () => {
+	await asyncForEach(devices, async (device) => {
+		try {
+			const states = await doExecute(userId, device.id, execution[0]);
 			commands[0].ids.push(device.id);
 			commands[0].states = states;
 			// Report state back to Homegraph
@@ -132,21 +139,17 @@ app.onExecute(async (body, headers) => {
 				errorCode: e.message,
 			});
 		}
-  });
+	});	  
+  } 
+  await start();
   
   return {
         requestId: body.requestId,
         payload: {
             commands,
         },
-    };
+  };
 });
-
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
 
 app.onQuery(async (body, headers) => {
   // TODO Get device state
@@ -169,8 +172,8 @@ app.onQuery(async (body, headers) => {
 			  devices: deviceStates,
 			},
 		  };
-		  console.log(JSON.stringify(myObject, null, 4));
-		  return myObject;
+	  //console.log(JSON.stringify(myObject, null, 4));
+	  return myObject;
   }catch(e){
 	console.log(e.getmessage);
   }
