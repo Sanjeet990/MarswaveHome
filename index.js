@@ -153,7 +153,7 @@ app.onQuery(async (body, headers) => {
 	  deviceStates[device.id] = states;
   });
   
-  cons myObject = {
+  const myObject = {
     requestId: body.requestId,
     payload: {
       devices: deviceStates,
