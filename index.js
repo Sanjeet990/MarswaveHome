@@ -20,7 +20,9 @@ const auth0 = new AuthenticationClient({
 const functions = require('firebase-functions');
 
 const {smarthome} = require('actions-on-google');
-const app = smarthome({verification: 'marswave-home-fdb30'});
+const app = smarthome({
+  jwt: require('./secrets.json');
+});
 
 const getEmail = async (headers) => {
   const accessToken = headers.authorization.substr(7);
@@ -110,17 +112,17 @@ app.onExecute(async (body, headers) => {
 			commands[0].ids.push(device.id);
 			commands[0].states = states;
 			// Report state back to Homegraph
-			//app.reportState({
-			//	agentUserId: userId,
-			//	requestId: Math.random().toString(),
-			//	payload: {
-			//		devices: {
-			//			states: {
-			//				[device.id]: states,
-			//			},
-			//		},
-			//	},
-			//});
+			app.reportState({
+				agentUserId: userId,
+				requestId: Math.random().toString(),
+				payload: {
+					devices: {
+						states: {
+							[device.id]: states,
+						},
+					},
+				},
+			});
 		}
 		catch (e) {
 			commands.push({
