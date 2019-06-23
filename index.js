@@ -153,12 +153,14 @@ app.onQuery(async (body, headers) => {
 	  deviceStates[device.id] = states;
   });
   
-  return {
+  cons myObject = {
     requestId: body.requestId,
     payload: {
       devices: deviceStates,
     },
   };
+  console.log(JSON.stringify(myObject, null, 4));
+  return myObject;
 });
 
 app.onDisconnect((body, headers) => {
@@ -172,7 +174,7 @@ const getStatus = async (userId, deviceId) => {
         if (!doc.exists) {
             throw new Error('deviceNotFound' + deviceId);
         }
-        return doc.data()!!.states;
+        return doc.data().states;
 }
 
 
