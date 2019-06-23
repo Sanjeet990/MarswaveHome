@@ -34,6 +34,30 @@ db.settings({timestampsInSnapshots: true});
 
 var port = process.env.PORT || 3000;
 
+
+
+app.onExecute((body, headers) => {
+  // TODO Send command to device
+  return {
+    requestId: body.requestId,
+    payload: {
+      commands: [{
+        ids: ["123"],
+        status: "SUCCESS",
+        states: {
+          on: true,
+          online: true
+        }
+      }, {
+        ids: ["456"],
+        status: "ERROR",
+        errorCode: "deviceTurnedOff"
+      }]
+    }
+  };
+});
+
+
 app.onSync(async (body, headers) => {
   const userEmail = await getEmail(headers);
   const userDoc = await db.collection('users').doc(userEmail).get();
@@ -92,64 +116,5 @@ app.onSync(async (body, headers) => {
     }
   }
 });
-
-
-app.onExecute((body, headers) => {
-  // TODO Send command to device
-  return {
-    requestId: body.requestId,
-    payload: {
-      commands: [{
-        ids: ["123"],
-        status: "SUCCESS",
-        states: {
-          on: true,
-          online: true
-        }
-      }, {
-        ids: ["456"],
-        status: "ERROR",
-        errorCode: "deviceTurnedOff"
-      }]
-    }
-  };
-});
-
-app.onDisconnect((body, headers) => {
-  // TODO Disconnect user account from Google Assistant
-  // You can return an empty body
-  return {};
-});
-
-const doExecute = async (userId, deviceId, execution) => {
-try{
-        const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
-        if (!doc.exists) {
-            //throw new Error('deviceNotFound' + deviceId);
-        }
-        const states = {
-            online: true,
-        };
-        const data = doc.data();
-        if (!data.states.online) {
-            //throw new Error('deviceOffline');
-        }
-        switch (execution.command) {
-            // action.devices.traits.ArmDisarm
-            case 'action.devices.commands.OnOff':
-                await db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
-                    'states.on': execution.params.on,
-                });
-                states['on'] = execution.params.on;
-                break;
-            // action.devices.traits.OpenClose
-            default:
-                //throw new Error('actionNotAvailable');
-        }
-        return states;
-		}catch(e){
-		//Consume it for now
-		}
-}
 
 express().use(bodyParser.json(), app).listen(port);
