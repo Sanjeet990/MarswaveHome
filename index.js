@@ -156,7 +156,17 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
 	  const states = doCheck(userId, device.id);
-	  deviceStates[device.id] = states;
+	  app.reportState({
+				agentUserId: userId,
+				requestId: Math.random().toString(),
+				payload: {
+					devices: {
+						states: {
+							[device.id]: states,
+						},
+					},
+				},
+			});
   });
       
   const myObject = {
