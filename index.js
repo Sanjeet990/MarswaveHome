@@ -108,7 +108,7 @@ app.onExecute(async (body, headers) => {
   
   devices.forEach(device => {
 	  try {
-			const states = doExecute(userId, device.id, execution[0]);
+			//const states = doExecute(userId, device.id, execution[0]);
 			commands[0].ids.push(device.id);
 			commands[0].states = states;
 			// Report state back to Homegraph
