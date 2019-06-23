@@ -152,7 +152,7 @@ app.onQuery(async (body, headers) => {
   devices.forEach(device => {
       const doc = db.collection('users').doc(userId).collection('devices').doc(device.id).get();
 	  if (!doc.exists) {
-        throw new Error('deviceNotFound');
+        throw new Error('deviceNotFound' + device.id);
       }
       const data = doc.data().states;
 	  deviceStates[device.id] = data;
