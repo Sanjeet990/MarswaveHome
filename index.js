@@ -142,11 +142,17 @@ app.onExecute(async (body, headers) => {
     };
 });
 
+
+interface DeviceStatesMap {
+  // tslint:disable-next-line
+  [key: string]: any
+}
+
 app.onQuery(async (body, headers) => {
   // TODO Get device state
   const userId = await getEmail(headers);
   const { devices } = body.inputs[0].payload;
-  const deviceStates = {};
+  const deviceStates: DeviceStatesMap = {};
   
   devices.forEach(async(device) => {
       const doc = await db.collection('users').doc(userId).collection('devices').doc(device.id).get();
