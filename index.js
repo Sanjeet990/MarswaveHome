@@ -144,16 +144,19 @@ app.onExecute(async (body, headers) => {
 
 app.onQuery((body, headers) => {
   // TODO Get device state
+  const userId = await getEmail(headers);
+  const { devices } = body.inputs[0].payload;
+  const deviceStates = [];
+  
+  devices.forEach(device => {
+	deviceStates[device.id] = true;
+  });
+  
   return {
     requestId: body.requestId,
     payload: {
-      devices: {
-        'Device 1': {
-          on: true,
-          online: true
-        }
-      }
-    }
+      devices: deviceStates,
+    },
   };
 });
 
