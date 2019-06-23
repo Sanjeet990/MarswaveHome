@@ -174,4 +174,4 @@ const doExecute = async (userId, deviceId, execution) => {
         return states;
 }
 
-express().use(bodyParser.json(), app.getItems).listen(port);
+express().use(bodyParser.json(), app.router).listen(port);
