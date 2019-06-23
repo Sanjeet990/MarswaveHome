@@ -159,7 +159,7 @@ app.onQuery(async (body, headers) => {
       devices: deviceStates,
     },
   };
-  console.log(JSON.stringify(myObject, null, 4));
+  //console.log(JSON.stringify(myObject, null, 4));
   return myObject;
 });
 
@@ -170,8 +170,8 @@ app.onDisconnect((body, headers) => {
 });
 
 const getStatus = async (userId, deviceId) => {
-console.log("called");
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
+		console.log(JSON.stringify(doc, null, 4));
         if (!doc.exists) {
             throw new Error('deviceNotFound' + deviceId);
         }
