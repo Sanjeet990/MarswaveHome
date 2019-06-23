@@ -95,17 +95,7 @@ app.onSync(async (body, headers) => {
 
 
 app.onExecute(async (body, headers) => {
-  // TODO Send command to device
-  const userId = await getEmail(headers);
-  
-  const commands = [{
-    ids: [],
-    status: 'SUCCESS',
-    states: {},
-  }];
-  
-  const { devices, execution } = body.inputs[0].payload.commands[0];
-  
+
 });
 
 app.onDisconnect((body, headers) => {
