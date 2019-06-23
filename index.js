@@ -96,6 +96,7 @@ app.onSync(async (body, headers) => {
 
 app.onExecute(async (body, headers) => {
   // TODO Send command to device
+  try{
   const userId = await getEmail(headers);
   
   const commands = [{
@@ -139,6 +140,9 @@ app.onExecute(async (body, headers) => {
             commands,
         },
     };
+	}catch{
+	//consume the error
+	}
 });
 
 app.onDisconnect((body, headers) => {
