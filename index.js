@@ -21,7 +21,7 @@ const functions = require('firebase-functions');
 
 const {smarthome} = require('actions-on-google');
 const app = smarthome({
-  jwt: require('./secrets.json');
+  jwt: require('./secrets.json')
 });
 
 const getEmail = async (headers) => {
