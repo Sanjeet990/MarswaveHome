@@ -1,22 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-
-function asyncForEach(array, callback) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (let index = 0; index < array.length; index++) {
-            yield callback(array[index], index, array);
-        }
-    });
-}
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -42,14 +23,6 @@ const {smarthome} = require('actions-on-google');
 const app = smarthome({
   jwt: require('./secrets.json')
 });
-
-function getUserIdOrThrow(headers) {
-    return __awaiter(this, void 0, void 0, function* () {
-		const accessToken = headers.authorization.substr(7);
-        const userId = yield auth0.getProfile(accessToken);
-        return userId;
-    });
-}
 
 const getEmail = async (headers) => {
   const accessToken = headers.authorization.substr(7);
@@ -169,32 +142,32 @@ app.onExecute(async (body, headers) => {
     };
 });
 
-app.onQuery((body, headers) => __awaiter(this, void 0, void 0, function* () {
-    const userId = yield getUserIdOrThrow(headers);
-    const deviceStates = {};
-    const { devices } = body.inputs[0].payload;
-    yield asyncForEach(devices, (device) => __awaiter(this, void 0, void 0, function* () {
-        const states = yield getState(userId, device.id);
-        deviceStates[device.id] = states;
-    }));
-    return {
-        requestId: body.requestId,
-        payload: {
-            devices: deviceStates,
-        },
-    };
-}));
-
-function getState(userId, deviceId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const doc = yield db.collection('users').doc(userId)
-            .collection('devices').doc(deviceId).get();
-        if (!doc.exists) {
-            throw new Error('deviceNotFound');
-        }
-        return doc.data().states;
-    });
-}
+app.onQuery(async (body, headers) => {
+  // TODO Get device state
+  try{
+  const userId = await getEmail(headers);
+  const { devices } = body.inputs[0].payload;
+  const deviceStates = {};
+  
+  devices.forEach(async(device) => {
+	  var promise1 = Promise.resolve(doCheck(userId, device.id));
+	  promise1.then(function(value) {
+		deviceStates[device.id] = value;
+	  });
+  });
+      
+  const myObject = {
+    requestId: body.requestId,
+    payload: {
+      devices: deviceStates,
+    },
+  };
+  console.log(JSON.stringify(myObject, null, 4));
+  return myObject;
+  }catch(e){
+  console(e.getmessage);
+  }
+});
 
 app.onDisconnect((body, headers) => {
   // TODO Disconnect user account from Google Assistant
