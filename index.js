@@ -94,9 +94,9 @@ app.onSync(async (body, headers) => {
 });
 
 
-app.onExecute((body, headers) => {
+app.onExecute(async (body, headers) => {
   // TODO Send command to device
-  const userId = getEmail(headers);
+  const userId = await getEmail(headers);
   
   const commands = [{
     ids: [],
@@ -174,4 +174,4 @@ const doExecute = async (userId, deviceId, execution) => {
         return states;
 }
 
-express().use(bodyParser.json(), app).listen(port);
+express().use(bodyParser.json(), app.getItems).listen(port);
