@@ -150,12 +150,8 @@ app.onQuery(async (body, headers) => {
   const deviceStates = {};
   
   devices.forEach(device => {
-      const doc = db.collection('users').doc(userId).collection('devices').doc(device.id).get();
-	  if (!doc.exists) {
-        throw new Error('deviceNotFound' + device.id);
-      }
-      const data = doc.data().states;
-	  deviceStates[device.id] = data;
+	  const states = doCheck(userId, device.id);
+      deviceStates[device.id] = data;
   });
   
   const myObject = {
@@ -173,6 +169,14 @@ app.onDisconnect((body, headers) => {
   // You can return an empty body
   return {};
 });
+
+const doCheck = async (userId, deviceId) => {
+	  const doc = await db.collection('users').doc(userId).collection('devices').doc(device.id).get();
+	  if (!doc.exists) {
+        throw new Error('deviceNotFound' + device.id);
+      }
+      const data = doc.data().states;
+}
 
 const doExecute = async (userId, deviceId, execution) => {
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
