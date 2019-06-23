@@ -146,10 +146,11 @@ app.onQuery(async (body, headers) => {
   // TODO Get device state
   const userId = await getEmail(headers);
   const { devices } = body.inputs[0].payload;
-  const deviceStates = [];
+  const deviceStates = {};
   
   devices.forEach(device => {
-	deviceStates[device.id] = true;
+      const states = getStatus(userId, device.id);
+	  deviceStates[device.id] = states;
   });
   
   return {
@@ -165,6 +166,15 @@ app.onDisconnect((body, headers) => {
   // You can return an empty body
   return {};
 });
+
+const getStatus = async (userId, deviceId) => {
+        const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
+        if (!doc.exists) {
+            throw new Error('deviceNotFound' + deviceId);
+        }
+        return doc.data()!!.states;
+}
+
 
 const doExecute = async (userId, deviceId, execution) => {
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
