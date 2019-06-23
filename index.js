@@ -170,6 +170,7 @@ app.onDisconnect((body, headers) => {
 });
 
 const getStatus = async (userId, deviceId) => {
+console.log("called");
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
         if (!doc.exists) {
             throw new Error('deviceNotFound' + deviceId);
