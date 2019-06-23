@@ -174,7 +174,7 @@ app.onQuery((body, headers) => __awaiter(this, void 0, void 0, function* () {
     const deviceStates = {};
     const { devices } = body.inputs[0].payload;
     yield asyncForEach(devices, (device) => __awaiter(this, void 0, void 0, function* () {
-        const states = yield doCheck(userId, device.id);
+        const states = yield getState(userId, device.id);
         deviceStates[device.id] = states;
     }));
     return {
@@ -184,6 +184,17 @@ app.onQuery((body, headers) => __awaiter(this, void 0, void 0, function* () {
         },
     };
 }));
+
+function getState(userId, deviceId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const doc = yield db.collection('users').doc(userId)
+            .collection('devices').doc(deviceId).get();
+        if (!doc.exists) {
+            throw new Error('deviceNotFound');
+        }
+        return doc.data().states;
+    });
+}
 
 app.onDisconnect((body, headers) => {
   // TODO Disconnect user account from Google Assistant
