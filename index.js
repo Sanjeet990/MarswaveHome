@@ -43,6 +43,14 @@ const app = smarthome({
   jwt: require('./secrets.json')
 });
 
+function getUserIdOrThrow(headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+		const accessToken = headers.authorization.substr(7);
+        const userId = yield auth0.getProfile(accessToken);
+        return userId;
+    });
+}
+
 const getEmail = async (headers) => {
   const accessToken = headers.authorization.substr(7);
   const {email} = await auth0.getProfile(accessToken);
@@ -161,30 +169,21 @@ app.onExecute(async (body, headers) => {
     };
 });
 
-app.onQuery(async (body, headers) => {
-  // TODO Get device state
-  try{
-  const userId = await getEmail(headers);
-  const { devices } = body.inputs[0].payload;
-  const deviceStates = {};
-  
-  devices.forEach(async(device) => {
-	  const states = await doCheck(userId, device.id);
-	  deviceStates[device.id] = states;
-  });
-      
-  const myObject = {
-    requestId: body.requestId,
-    payload: {
-      devices: deviceStates,
-    },
-  };
-  console.log(JSON.stringify(myObject, null, 4));
-  return myObject;
-  }catch(e){
-  console(e.getmessage);
-  }
-});
+app.onQuery((body, headers) => __awaiter(this, void 0, void 0, function* () {
+    const userId = yield getUserIdOrThrow(headers);
+    const deviceStates = {};
+    const { devices } = body.inputs[0].payload;
+    yield asyncForEach(devices, (device) => __awaiter(this, void 0, void 0, function* () {
+        const states = yield doCheck(userId, device.id);
+        deviceStates[device.id] = states;
+    }));
+    return {
+        requestId: body.requestId,
+        payload: {
+            devices: deviceStates,
+        },
+    };
+}));
 
 app.onDisconnect((body, headers) => {
   // TODO Disconnect user account from Google Assistant
