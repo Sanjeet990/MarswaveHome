@@ -140,7 +140,7 @@ app.onExecute(async (body, headers) => {
             commands,
         },
     };
-	}catch{
+	}catch(e){
 	//consume the error
 	}
 });
