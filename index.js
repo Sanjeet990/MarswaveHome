@@ -149,13 +149,14 @@ app.onQuery(async (body, headers) => {
   const { devices } = body.inputs[0].payload;
   const deviceStates = {};
   
-  await devices.forEach(async(device) => {
-	  const state = await doCheck(userId, device.id);
-	  deviceStates[device.id] = state;
-	  console.log(JSON.stringify(deviceStates[device.id], null, 4));
-  });
-      
-  const myObject = {
+  
+  const start = async () => {
+	  await asyncForEach(devices, async (device) => {
+		const state = await doCheck(userId, device.id);
+	    deviceStates[device.id] = state;
+	    console.log(JSON.stringify(deviceStates[device.id], null, 4));
+	  });
+	  const myObject = {
     requestId: body.requestId,
     payload: {
       devices: deviceStates,
@@ -163,6 +164,8 @@ app.onQuery(async (body, headers) => {
   };
   console.log(JSON.stringify(myObject, null, 4));
   return myObject;
+ } 
+  start();
   }catch(e){
 	console.log(e.getmessage);
   }
