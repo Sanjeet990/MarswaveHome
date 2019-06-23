@@ -142,24 +142,15 @@ app.onExecute(async (body, headers) => {
     };
 });
 
-pp.onQuery((body, headers) => {
+app.onQuery((body, headers) => {
   // TODO Get device state
   return {
     requestId: body.requestId,
     payload: {
       devices: {
-        123: {
+        55: {
           on: true,
           online: true
-        },
-        456: {
-          on: true,
-          online: true,
-          brightness: 80,
-          color: {
-            name: "cerulean",
-            spectrumRGB: 31655
-          }
         }
       }
     }
