@@ -153,8 +153,9 @@ app.onQuery(async (body, headers) => {
 	  if (!doc.exists) {
         throw new Error('deviceNotFound');
       }
-      const data = doc.data()!!.states;
+      const data = doc.data().states;
 	  deviceStates[device.id] = data;
+	  console.log(JSON.stringify(deviceStates[device.id], null, 4));
   });
   
   const myObject = {
@@ -163,7 +164,7 @@ app.onQuery(async (body, headers) => {
       devices: deviceStates,
     },
   };
-  console.log(JSON.stringify(myObject, null, 4));
+  //console.log(JSON.stringify(myObject, null, 4));
   return myObject;
 });
 
