@@ -171,9 +171,9 @@ app.onDisconnect((body, headers) => {
 });
 
 const doCheck = async (userId, deviceId) => {
-	  const doc = await db.collection('users').doc(userId).collection('devices').doc(device.id).get();
+	  const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
 	  if (!doc.exists) {
-        throw new Error('deviceNotFound' + device.id);
+        throw new Error('deviceNotFound' + deviceId);
       }
       const data = doc.data().states;
 	  return data;
