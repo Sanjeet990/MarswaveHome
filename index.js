@@ -94,55 +94,25 @@ app.onSync(async (body, headers) => {
 });
 
 
-app.onExecute(async (body, headers) => {
+app.onExecute((body, headers) => {
   // TODO Send command to device
-  try{
-  const userId = await getEmail(headers);
-  
-  const commands = [{
-    ids: [],
-    status: 'SUCCESS',
-    states: {},
-  }];
-  
-  const { devices, execution } = body.inputs[0].payload.commands[0];
-  
-  devices.forEach(device => {
-	  try {
-			const states = doExecute(userId, device.id, execution[0]);
-			commands[0].ids.push(device.id);
-			commands[0].states = states;
-			// Report state back to Homegraph
-			app.reportState({
-				agentUserId: userId,
-				requestId: Math.random().toString(),
-				payload: {
-					devices: {
-						states: {
-							[device.id]: states,
-						},
-					},
-				},
-			});
-		}
-		catch (e) {
-			commands.push({
-				ids: [device.id],
-				status: 'ERROR',
-				errorCode: e.message,
-			});
-		}
-  });
-  
   return {
-        requestId: body.requestId,
-        payload: {
-            commands,
-        },
-    };
-	}catch(e){
-	//consume the error
-	}
+    requestId: body.requestId,
+    payload: {
+      commands: [{
+        ids: ["123"],
+        status: "SUCCESS",
+        states: {
+          on: true,
+          online: true
+        }
+      }, {
+        ids: ["456"],
+        status: "ERROR",
+        errorCode: "deviceTurnedOff"
+      }]
+    }
+  };
 });
 
 app.onDisconnect((body, headers) => {
