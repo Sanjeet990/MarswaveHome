@@ -148,7 +148,7 @@ app.onDisconnect((body, headers) => {
 });
 
 function doExecute(userId, deviceId, execution){
-        const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
+        const doc = db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
         if (!doc.exists) {
             throw new Error('deviceNotFound' + deviceId);
         }
@@ -162,7 +162,7 @@ function doExecute(userId, deviceId, execution){
         switch (execution.command) {
             // action.devices.traits.ArmDisarm
             case 'action.devices.commands.OnOff':
-                await db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
+                db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
                     'states.on': execution.params.on,
                 });
                 states['on'] = execution.params.on;
