@@ -150,7 +150,7 @@ app.onDisconnect((body, headers) => {
 const doExecute = async (userId, deviceId, execution) => {
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
         if (!doc.exists) {
-            throw new Error('deviceNotFound');
+            throw new Error('deviceNotFound' + deviceId);
         }
         const states = {
             online: true,
