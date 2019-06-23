@@ -148,7 +148,7 @@ app.onQuery((body, headers) => {
     requestId: body.requestId,
     payload: {
       devices: {
-        55: {
+        'Device 1': {
           on: true,
           online: true
         }
