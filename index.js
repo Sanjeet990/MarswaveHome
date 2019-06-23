@@ -160,7 +160,10 @@ app.onQuery(async (body, headers) => {
 			const state = await doCheck(userId, device.id);
 			deviceStates[device.id] = state;
 			});
-		  const myObject = {
+		  
+	  } 
+	  await start();'
+	  const myObject = {
 			requestId: body.requestId,
 			payload: {
 			  devices: deviceStates,
@@ -168,8 +171,6 @@ app.onQuery(async (body, headers) => {
 		  };
 		  console.log(JSON.stringify(myObject, null, 4));
 		  return myObject;
-	  } 
-	  start();
   }catch(e){
 	console.log(e.getmessage);
   }
