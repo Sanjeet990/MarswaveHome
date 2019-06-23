@@ -162,7 +162,7 @@ app.onQuery(async (body, headers) => {
 			});
 		  
 	  } 
-	  await start();'
+	  await start();
 	  const myObject = {
 			requestId: body.requestId,
 			payload: {
