@@ -147,29 +147,29 @@ app.onDisconnect((body, headers) => {
   return {};
 });
 
-function doExecute(userId, deviceId, execution){
-        const doc = db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
+const doExecute = async (userId, deviceId, execution) => {
+        const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
         if (!doc.exists) {
-            throw new Error('deviceNotFound' + deviceId);
+            //throw new Error('deviceNotFound' + deviceId);
         }
         const states = {
             online: true,
         };
         const data = doc.data();
         if (!data.states.online) {
-            throw new Error('deviceOffline');
+            //throw new Error('deviceOffline');
         }
         switch (execution.command) {
             // action.devices.traits.ArmDisarm
             case 'action.devices.commands.OnOff':
-                db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
+                await db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
                     'states.on': execution.params.on,
                 });
                 states['on'] = execution.params.on;
                 break;
             // action.devices.traits.OpenClose
             default:
-                throw new Error('actionNotAvailable');
+                //throw new Error('actionNotAvailable');
         }
         return states;
 }
