@@ -154,6 +154,8 @@ app.onQuery(async (body, headers) => {
       deviceStates[device.id] = states;
   });
   
+  await sleep(1000);
+  
   const myObject = {
     requestId: body.requestId,
     payload: {
