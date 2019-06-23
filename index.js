@@ -109,7 +109,7 @@ app.onExecute(async (body, headers) => {
   
   devices.forEach(device => {
 	  try {
-			const states = doExecute(userId, device.id, execution[0]);
+			const states = await doExecute(userId, device.id, execution[0]);
 			commands[0].ids.push(device.id);
 			commands[0].states = states;
 			// Report state back to Homegraph
@@ -149,7 +149,8 @@ app.onQuery(async (body, headers) => {
   const deviceStates = {};
   
   devices.forEach(device => {
-      const states = getStatus(userId, device.id);
+      const states = await getStatus(userId, device.id);
+	  console.log(JSON.stringify(states, null, 4));
 	  deviceStates[device.id] = states;
   });
   
@@ -171,8 +172,7 @@ app.onDisconnect((body, headers) => {
 
 const getStatus = async (userId, deviceId) => {
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
-		console.log(JSON.stringify(doc, null, 4));
-        if (!doc.exists) {
+		if (!doc.exists) {
             throw new Error('deviceNotFound' + deviceId);
         }
         return doc.data().states;
