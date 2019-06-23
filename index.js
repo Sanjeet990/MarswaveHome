@@ -149,7 +149,7 @@ app.onQuery(async (body, headers) => {
   const { devices } = body.inputs[0].payload;
   const deviceStates = {};
   
-  devices.forEach(async(device) => {
+  devices.forEach(device => {
 	  var promise1 = Promise.resolve(doCheck(userId, device.id));
 	  promise1.then(function(value) {
 		deviceStates[device.id] = value;
@@ -175,13 +175,13 @@ app.onDisconnect((body, headers) => {
   return {};
 });
 
-const doCheck = async (userId, deviceId) => {
-	  const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
+function doCheck(userId, deviceId){
+	  const doc = db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
 	  if (!doc.exists) {
         throw new Error('deviceNotFound' + deviceId);
-      }
-      const data = doc.data().states;
-	  return data;
+      }else{
+		return doc.data().states;
+	  }
 }
 
 const doExecute = async (userId, deviceId, execution) => {
