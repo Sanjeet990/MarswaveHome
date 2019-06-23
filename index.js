@@ -156,10 +156,11 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
 	  const states = doCheck(userId, device.id);
-	  sleep(4000);
-      deviceStates[device.id] = states;
+	  deviceStates[device.id] = states;
   });
   
+  sleep(4000);
+      
   const myObject = {
     requestId: body.requestId,
     payload: {
