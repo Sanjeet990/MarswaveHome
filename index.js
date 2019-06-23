@@ -158,8 +158,6 @@ app.onQuery(async (body, headers) => {
 	  const states = doCheck(userId, device.id);
 	  deviceStates[device.id] = states;
   });
-  
-  sleep(4000);
       
   const myObject = {
     requestId: body.requestId,
@@ -179,6 +177,7 @@ app.onDisconnect((body, headers) => {
 
 const doCheck = async (userId, deviceId) => {
 	  const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
+	  sleep(4000);
 	  if (!doc.exists) {
         throw new Error('deviceNotFound' + deviceId);
       }
