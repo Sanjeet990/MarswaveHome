@@ -150,10 +150,8 @@ app.onQuery(async (body, headers) => {
   const deviceStates = {};
   
   devices.forEach(device => {
-	  var promise1 = Promise.resolve(await doCheck(userId, device.id));
-	  promise1.then(function(value) {
-		deviceStates[device.id] = value;
-	  });
+	  const state = doCheck(userId, device.id));
+	  deviceStates[device.id] = state;
   });
       
   const myObject = {
