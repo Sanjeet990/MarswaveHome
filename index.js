@@ -143,16 +143,11 @@ app.onExecute(async (body, headers) => {
 });
 
 
-interface DeviceStatesMap {
-  // tslint:disable-next-line
-  [key: string]: any
-}
-
 app.onQuery(async (body, headers) => {
   // TODO Get device state
   const userId = await getEmail(headers);
   const { devices } = body.inputs[0].payload;
-  const deviceStates: DeviceStatesMap = {};
+  const deviceStates = {[]};
   
   devices.forEach(async(device) => {
       const doc = await db.collection('users').doc(userId).collection('devices').doc(device.id).get();
@@ -160,8 +155,8 @@ app.onQuery(async (body, headers) => {
         throw new Error('deviceNotFound');
       }
       const data = doc.data().states;
-	  deviceStates[device.id] = data;
-	  console.log(JSON.stringify(deviceStates[device.id], null, 4));
+	  deviceStates[device.id].push(data);
+	  //console.log(JSON.stringify(deviceStates, null, 4));
   });
   
   const myObject = {
@@ -170,7 +165,7 @@ app.onQuery(async (body, headers) => {
       devices: deviceStates,
     },
   };
-  //console.log(JSON.stringify(myObject, null, 4));
+  console.log(JSON.stringify(myObject, null, 4));
   return myObject;
 });
 
