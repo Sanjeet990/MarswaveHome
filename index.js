@@ -150,7 +150,6 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
       const states = getStatus(userId, device.id);
-	  console.log(JSON.stringify(states, null, 4));
 	  deviceStates[device.id] = states;
   });
   
@@ -175,7 +174,8 @@ const getStatus = async (userId, deviceId) => {
 		if (!doc.exists) {
             throw new Error('deviceNotFound' + deviceId);
         }
-        return doc.data().states;
+        const data = doc.data().states;
+		console.log(JSON.stringify(data, null, 4));
 }
 
 
