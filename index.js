@@ -109,7 +109,7 @@ app.onExecute(async (body, headers) => {
   
   devices.forEach(device => {
 	  try {
-			const states = await doExecute(userId, device.id, execution[0]);
+			const states = doExecute(userId, device.id, execution[0]);
 			commands[0].ids.push(device.id);
 			commands[0].states = states;
 			// Report state back to Homegraph
@@ -149,7 +149,7 @@ app.onQuery(async (body, headers) => {
   const deviceStates = {};
   
   devices.forEach(device => {
-      const states = await getStatus(userId, device.id);
+      const states = getStatus(userId, device.id);
 	  console.log(JSON.stringify(states, null, 4));
 	  deviceStates[device.id] = states;
   });
