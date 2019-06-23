@@ -142,7 +142,7 @@ app.onExecute(async (body, headers) => {
     };
 });
 
-app.onQuery((body, headers) => {
+app.onQuery(async (body, headers) => {
   // TODO Get device state
   const userId = await getEmail(headers);
   const { devices } = body.inputs[0].payload;
