@@ -162,9 +162,9 @@ const doExecute = async (userId, deviceId, execution) => {
         switch (execution.command) {
             // action.devices.traits.ArmDisarm
             case 'action.devices.commands.OnOff':
-                //await db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
-                //    'states.on': execution.params.on,
-                //});
+                await db.collection('users').doc(userId).collection('devices').doc(deviceId).update({
+                    'states.on': execution.params.on,
+                });
                 states['on'] = execution.params.on;
                 break;
             // action.devices.traits.OpenClose
