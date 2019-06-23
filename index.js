@@ -150,7 +150,7 @@ app.onQuery(async (body, headers) => {
   const deviceStates = {};
   
   devices.forEach(device => {
-	  const state = doCheck(userId, device.id));
+	  const state = doCheck(userId, device.id);
 	  deviceStates[device.id] = state;
   });
       
