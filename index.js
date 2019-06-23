@@ -152,6 +152,7 @@ app.onQuery(async (body, headers) => {
   await devices.forEach(async(device) => {
 	  const state = await doCheck(userId, device.id);
 	  deviceStates[device.id] = state;
+	  console.log(JSON.stringify(deviceStates[device.id], null, 4));
   });
       
   const myObject = {
