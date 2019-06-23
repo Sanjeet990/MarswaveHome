@@ -148,6 +148,7 @@ app.onDisconnect((body, headers) => {
 });
 
 const doExecute = async (userId, deviceId, execution) => {
+try{
         const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
         if (!doc.exists) {
             //throw new Error('deviceNotFound' + deviceId);
@@ -172,6 +173,9 @@ const doExecute = async (userId, deviceId, execution) => {
                 //throw new Error('actionNotAvailable');
         }
         return states;
+		}catch(e){
+		//Consume it for now
+		}
 }
 
 express().use(bodyParser.json(), app).listen(port);
