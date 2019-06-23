@@ -151,7 +151,7 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
 	  const states = doCheck(userId, device.id);
-	  await sleep(4000);
+	  sleep(4000);
       deviceStates[device.id] = states;
   });
   
