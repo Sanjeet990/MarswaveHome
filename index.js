@@ -151,7 +151,7 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
 	  const states = doCheck(userId, device.id);
-      deviceStates[device.id] = data;
+      deviceStates[device.id] = states;
   });
   
   const myObject = {
