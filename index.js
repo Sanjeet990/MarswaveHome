@@ -147,7 +147,7 @@ app.onQuery(async (body, headers) => {
   // TODO Get device state
   const userId = await getEmail(headers);
   const { devices } = body.inputs[0].payload;
-  const deviceStates = [{}];
+  const deviceStates = {};
   
   devices.forEach(async(device) => {
       const doc = await db.collection('users').doc(userId).collection('devices').doc(device.id).get();
@@ -155,8 +155,7 @@ app.onQuery(async (body, headers) => {
         throw new Error('deviceNotFound');
       }
       const data = doc.data().states;
-	  deviceStates[device.id].push(data);
-	  //console.log(JSON.stringify(deviceStates, null, 4));
+	  deviceStates[device.id] = data;
   });
   
   const myObject = {
