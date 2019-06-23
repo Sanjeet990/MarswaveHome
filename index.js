@@ -159,13 +159,14 @@ app.onQuery(async (body, headers) => {
 		  await asyncForEach(devices, async (device) => {
 			const state = await doCheck(userId, device.id);
 			deviceStates[device.id] = state;
-		  });
+			});
 		  const myObject = {
 			requestId: body.requestId,
 			payload: {
 			  devices: deviceStates,
 			},
 		  };
+		  console.log(JSON.stringify(myObject, null, 4));
 		  return myObject;
 	  } 
 	  start();
