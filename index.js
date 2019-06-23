@@ -151,27 +151,24 @@ async function asyncForEach(array, callback) {
 app.onQuery(async (body, headers) => {
   // TODO Get device state
   try{
-  const userId = await getEmail(headers);
-  const { devices } = body.inputs[0].payload;
-  const deviceStates = {};
-  
-  
-  const start = async () => {
-	  await asyncForEach(devices, async (device) => {
-		const state = await doCheck(userId, device.id);
-	    deviceStates[device.id] = state;
-	    console.log(JSON.stringify(deviceStates[device.id], null, 4));
-	  });
-	  const myObject = {
-    requestId: body.requestId,
-    payload: {
-      devices: deviceStates,
-    },
-  };
-  console.log(JSON.stringify(myObject, null, 4));
-  return myObject;
- } 
-  start();
+	  const userId = await getEmail(headers);
+	  const { devices } = body.inputs[0].payload;
+	  const deviceStates = {};
+	  
+	  const start = async () => {
+		  await asyncForEach(devices, async (device) => {
+			const state = await doCheck(userId, device.id);
+			deviceStates[device.id] = state;
+		  });
+		  const myObject = {
+			requestId: body.requestId,
+			payload: {
+			  devices: deviceStates,
+			},
+		  };
+		  return myObject;
+	  } 
+	  start();
   }catch(e){
 	console.log(e.getmessage);
   }
