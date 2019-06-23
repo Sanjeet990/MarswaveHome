@@ -151,10 +151,9 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
 	  const states = doCheck(userId, device.id);
+	  await sleep(4000);
       deviceStates[device.id] = states;
   });
-  
-  await sleep(1000);
   
   const myObject = {
     requestId: body.requestId,
