@@ -110,17 +110,17 @@ app.onExecute(async (body, headers) => {
 			commands[0].ids.push(device.id);
 			commands[0].states = states;
 			// Report state back to Homegraph
-			app.reportState({
-				agentUserId: userId,
-				requestId: Math.random().toString(),
-				payload: {
-					devices: {
-						states: {
-							[device.id]: states,
-						},
-					},
-				},
-			});
+			//app.reportState({
+			//	agentUserId: userId,
+			//	requestId: Math.random().toString(),
+			//	payload: {
+			//		devices: {
+			//			states: {
+			//				[device.id]: states,
+			//			},
+			//		},
+			//	},
+			//});
 		}
 		catch (e) {
 			commands.push({
