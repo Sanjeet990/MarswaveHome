@@ -165,7 +165,7 @@ app.onQuery(async (body, headers) => {
   console.log(JSON.stringify(myObject, null, 4));
   return myObject;
   }catch(e){
-  console(e.getmessage);
+	console.log(e.getmessage);
   }
 });
 
@@ -175,7 +175,7 @@ app.onDisconnect((body, headers) => {
   return {};
 });
 
-function doCheck(userId, deviceId){
+const doCheck = async (userId, deviceId) => {
 	  const doc = db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
 	  if (!doc.exists) {
         throw new Error('deviceNotFound' + deviceId);
