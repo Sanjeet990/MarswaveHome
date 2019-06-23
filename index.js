@@ -176,6 +176,7 @@ const doCheck = async (userId, deviceId) => {
         throw new Error('deviceNotFound' + device.id);
       }
       const data = doc.data().states;
+	  return data;
 }
 
 const doExecute = async (userId, deviceId, execution) => {
