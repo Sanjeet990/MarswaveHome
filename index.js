@@ -115,7 +115,7 @@ app.onExecute(async (body, headers) => {
 			// Report state back to Homegraph
 			app.reportState({
 				agentUserId: userId,
-				requestId: Math.random().toString(),
+				requestId: body.requestId,
 				payload: {
 					devices: {
 						states: {
@@ -142,12 +142,6 @@ app.onExecute(async (body, headers) => {
     };
 });
 
-function sleep(ms){
-    return new Promise(resolve=>{
-        setTimeout(resolve,ms)
-    })
-}
-
 app.onQuery(async (body, headers) => {
   // TODO Get device state
   const userId = await getEmail(headers);
@@ -156,17 +150,7 @@ app.onQuery(async (body, headers) => {
   
   devices.forEach(device => {
 	  const states = doCheck(userId, device.id);
-	  app.reportState({
-				agentUserId: userId,
-				requestId: Math.random().toString(),
-				payload: {
-					devices: {
-						states: {
-							[device.id]: states,
-						},
-					},
-				},
-			});
+	  deviceStates[device.id] = states;
   });
       
   const myObject = {
@@ -187,7 +171,6 @@ app.onDisconnect((body, headers) => {
 
 const doCheck = async (userId, deviceId) => {
 	  const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
-	  sleep(4000);
 	  if (!doc.exists) {
         throw new Error('deviceNotFound' + deviceId);
       }
