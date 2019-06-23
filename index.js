@@ -148,7 +148,7 @@ app.onQuery(async (body, headers) => {
   const { devices } = body.inputs[0].payload;
   const deviceStates = {};
   
-  devices.forEach(device => {
+  devices.forEach(async(device) => {
       const doc = await db.collection('users').doc(userId).collection('devices').doc(deviceId).get();
 	  if (!doc.exists) {
         throw new Error('deviceNotFound' + deviceId);
