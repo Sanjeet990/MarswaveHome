@@ -20,7 +20,7 @@ const auth0 = new AuthenticationClient({
 const functions = require('firebase-functions');
 
 const {smarthome} = require('actions-on-google');
-const app = smarthome();
+const app = smarthome({verification: 'marswave-home-fdb30'});
 
 const getEmail = async (headers) => {
   const accessToken = headers.authorization.substr(7);
