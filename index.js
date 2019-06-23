@@ -142,6 +142,11 @@ app.onExecute(async (body, headers) => {
     };
 });
 
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
 
 app.onQuery(async (body, headers) => {
   // TODO Get device state
